@@ -7,3 +7,4 @@ legalizer
 ploter
 ploter.cpp
 testcase
+*.png
