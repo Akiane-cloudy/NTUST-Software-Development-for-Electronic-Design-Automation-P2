@@ -15,7 +15,7 @@ class Row {
 
    public:
     std::vector<Cell*> cells;
-    int x, y, x_min, x_max;  // x_min and x_max are the min and max x position of the row;
+    int x, y, x_min, x_max;
     std::string name;
     std::string siteName;
     Orientation orientation;

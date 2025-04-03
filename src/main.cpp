@@ -3,7 +3,6 @@
 #include "../include/Layer.hpp"
 
 int main(int argc, char** argv) {
-    //./legalizer [cell width (in terms of sites)] [alpha] [input file name] [output file name]
     if (argc != 5) {
         std::cerr << "Usage: " << argv[0] << " [cell width] [alpha] [input file] [output file]" << std::endl;
         return 1;
