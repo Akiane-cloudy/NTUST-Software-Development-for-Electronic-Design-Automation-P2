@@ -73,8 +73,8 @@ double Row::getCost(double alpha) {
 }
 
 void Row::mergeCluster(Cluster* cluster1, Cluster* cluster2) {
-    std::copy(cluster2->cells.begin(), cluster2->cells.end(),
-              std::back_inserter(cluster1->cells));
+    std::copy(cluster2->cells.begin(), cluster2->cells.end(), std::back_inserter(cluster1->cells));
+
     cluster1->ec += cluster2->ec;
     cluster1->qc += cluster2->qc - cluster2->ec * cluster1->wc;
     cluster1->wc += cluster2->wc;

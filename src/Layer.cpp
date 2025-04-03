@@ -80,9 +80,7 @@ void Layer::readFile() {
             int yStep = std::stoi(match[9]);
 
             rows.emplace_back(orient, rowName, siteName, x, y, xNum, yNum, xStep, yStep);
-            if (!cellHeight) {
-                cellHeight = std::abs(rows[0].y - rows[1].y);
-            }
+            if (!cellHeight) cellHeight = std::abs(rows[0].y - rows[1].y);
         } else {
             layerInfo.push_back(input);
         }
@@ -95,8 +93,8 @@ void Layer::readFile() {
 void Layer::outputFile() {
     std::ofstream out(outputPath);
 
-    for (int i = 0; i < 9; i++) {
-        out << layerInfo[i] << std::endl;
+    for (int i = 0; i < 8; i++) {
+        out << layerInfo[i];
     }
 
     for (auto &row : rows) {
