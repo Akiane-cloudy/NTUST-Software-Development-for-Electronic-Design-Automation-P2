@@ -1,0 +1,9 @@
+.vscode
+*.o
+*.out
+legalizer
+*.def
+*.gp
+ploter
+ploter.cpp
+testcase
