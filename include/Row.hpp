@@ -11,11 +11,11 @@ class Row {
    private:
     double totalDisplacement;
     double maxDisplacement;
-    int finalCellX;
 
    public:
-    std::vector<Cell*> cells;
+    std::list<Cluster> clusters;
     int x, y, x_min, x_max;
+    static int cell_width;
     std::string name;
     std::string siteName;
     Orientation orientation;
@@ -24,10 +24,10 @@ class Row {
     int xStep;
     int yStep;
 
-    int cluster_final_pos;
+    int cell_size;
 
     Row(Orientation _orientation, std::string _name, std::string _siteName, int _x, int _y, int _xNum, int _yNum, int _xStep, int _yStep);
-    void addRow(Cell* cell);
+    void addCell(Cell* cell);
     void placeRow(bool isFinal);
     double getCost(double alpha);
     void mergeCluster(Cluster* cluster1, Cluster* cluster2);
