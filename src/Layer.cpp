@@ -88,13 +88,14 @@ void Layer::readFile() {
 
     Layer::cells = cells;
     Layer::rows = rows;
+    Row::cell_width = cellWidth;
 }
 
 void Layer::outputFile() {
     std::ofstream out(outputPath);
 
     for (int i = 0; i < 8; i++) {
-        out << layerInfo[i];
+        out << layerInfo[i] << '\n';
     }
 
     for (auto &row : rows) {
@@ -121,11 +122,12 @@ void Layer::legalization() {
     for (auto &cell : cells) {
         double best_cost = std::numeric_limits<double>::max();
         Row *best_row = nullptr;
-        auto copy_cell = cell;  // Create a copy of the cell to avoid modifying the original
+        auto copy_cell = cell;
 
         for (auto &row : rows) {
-            auto copy_row_cells = row.cells;  // Create a copy of the row to avoid modifying the original
-            row.addRow(&cell);
+            auto copy_clusters = row.clusters;
+
+            row.addCell(&cell);
             row.placeRow(false);
 
             double cost = row.getCost(alpha);
@@ -134,13 +136,14 @@ void Layer::legalization() {
                 best_row = &row;
             }
 
-            row.reset();                 // Reset the row for the next iteration
-            row.cells = copy_row_cells;  // Restore the original row
+            row.reset();
+            row.clusters = copy_clusters;
+            row.cell_size -= 1;
             cell = copy_cell;
         }
 
         if (best_row) {
-            best_row->addRow(&cell);
+            best_row->addCell(&cell);
             best_row->placeRow(true);
         }
     }
