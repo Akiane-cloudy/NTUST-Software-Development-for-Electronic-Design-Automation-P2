@@ -16,6 +16,7 @@ class Row {
     std::list<Cluster> clusters;
     int x, y, x_min, x_max;
     static int cell_width;
+    static int site_width;
     std::string name;
     std::string siteName;
     Orientation orientation;

@@ -1,6 +1,11 @@
 #include "../include/Row.hpp"
 
 int Row::cell_width = 0;
+int Row::site_width = 0;
+
+int alignToSite(int position) {
+    return ((position + Row::site_width / 2) / Row::site_width) * Row::site_width;
+}
 
 Row::Row(Orientation _orientation, std::string _name, std::string _siteName, int _x, int _y, int _xNum, int _yNum, int _xStep, int _yStep) {
     totalDisplacement = 0;
@@ -26,8 +31,8 @@ void Row::addCell(Cell* cell) {
     cell->orientation = this->orientation;
 
     int raw_position = std::clamp(cell->x_globalPlacement, x_min, std::max(x_max - cell->width, x_min));
-    int aligned_position = ((raw_position + cell_width / 2) / cell_width) * cell_width;
-    int valid_position = std::clamp(aligned_position, x_min, std::max(x_max - cell->width, x_min));
+    int valid_position = alignToSite(raw_position);
+    valid_position = std::clamp(valid_position, x_min, std::max(x_max - cell->width, x_min)); 
 
     if (clusters.empty() || clusters.back().xc + clusters.back().wc <= valid_position) {
         Cluster newCluster(0, 0, 0, valid_position);
@@ -79,8 +84,8 @@ void Row::mergeCluster(Cluster* cluster1, Cluster* cluster2) {
 void Row::Collapse(std::list<Cluster>& clusters, std::list<Cluster>::iterator currentIt) {
     while (true) {
         currentIt->xc = currentIt->qc / currentIt->ec;
-        currentIt->xc = ((currentIt->xc + cell_width / 2) / cell_width) * cell_width;
-        currentIt->xc = std::clamp(currentIt->xc, x_min, std::max(x_max - currentIt->wc, x_min));
+        currentIt->xc = alignToSite(currentIt->xc);
+        currentIt->xc = std::clamp(currentIt->xc, x_min, std::max(x_max - currentIt->wc, x_min)); // 再次夾住，避免 align 後超界
 
         if (currentIt == clusters.begin()) break;
 

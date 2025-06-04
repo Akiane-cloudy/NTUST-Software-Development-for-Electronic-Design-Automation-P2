@@ -5,8 +5,9 @@ std::vector<Cell> Layer::cells;
 std::vector<std::string> Layer::layerInfo;
 std::string Layer::filePath = "";
 std::string Layer::outputPath = "";
-int Layer::cellWidth = 0;
+int Layer::cellWidth = 0; // site unit
 int Layer::cellHeight = 0;
+int Layer::siteWidth = 0;
 double Layer::alpha = 0.0;
 
 void Layer::init(std::string filePath, std::string outputPath, int cellWidth) {
@@ -52,7 +53,7 @@ void Layer::readFile() {
                     };
 
                     orient = getOrientation(match[5]);
-                    cells.emplace_back(name, type, x_globalPlacement, y_globalPlacement, x_legalization, y_legalization, orient, cellWidth, cellHeight);
+                    cells.emplace_back(name, type, x_globalPlacement, y_globalPlacement, x_legalization, y_legalization, orient, cellWidth * siteWidth, cellHeight);
                 }
             }
         } else if (std::regex_search(input, match, rowPattern)) {
@@ -79,6 +80,7 @@ void Layer::readFile() {
             int xStep = std::stoi(match[8]);
             int yStep = std::stoi(match[9]);
 
+            Layer::siteWidth = xStep; // Assuming siteWidth is the same as xStep
             rows.emplace_back(orient, rowName, siteName, x, y, xNum, yNum, xStep, yStep);
             if (!cellHeight) cellHeight = std::abs(rows[0].y - rows[1].y);
         } else {
@@ -86,9 +88,11 @@ void Layer::readFile() {
         }
     }
 
+    Layer::cellWidth = cellWidth * siteWidth; // input cell width is in site units
     Layer::cells = cells;
     Layer::rows = rows;
     Row::cell_width = cellWidth;
+    Row::site_width = siteWidth;
 }
 
 void Layer::outputFile() {
